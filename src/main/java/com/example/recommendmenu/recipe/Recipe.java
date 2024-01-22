@@ -19,4 +19,7 @@ public class Recipe {
 
   @Column(columnDefinition = "TEXT")
   private String title;
+
+  @Column(columnDefinition = "TEXT")
+  private String type;
 }

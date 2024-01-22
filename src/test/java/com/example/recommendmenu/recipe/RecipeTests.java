@@ -1,10 +1,7 @@
-package com.example.recommendmenu.recipeDetail;
+package com.example.recommendmenu.recipe;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.example.recommendmenu.recipe.Recipe;
-import com.example.recommendmenu.recipe.RecipeRepository;
-import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,17 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RecipeDetailTests {
+class RecipeTests {
 
   private static RecipeRepository recipeRepository;
 
   @Autowired
   private void recipeRepository(RecipeRepository recipeRepository) {
-    RecipeDetailTests.recipeRepository = recipeRepository;
+    RecipeTests.recipeRepository = recipeRepository;
   }
 
   @Autowired
-  private RecipeDetailService recipeDetailService;
+  private RecipeService recipeService;
+  private static Integer recipeNum;
 
   @BeforeAll
   public static void beforeAll() {
@@ -31,20 +29,16 @@ class RecipeDetailTests {
       Recipe recipe = new Recipe();
       recipe.setTitle("김치찌개");
       recipeRepository.save(recipe);
+    } else {
+      recipeNum = recipeRepository.findByTitle("김치찌개").getId();
     }
   }
 
-  /*
-  expected crawling recipe:
-  https://www.10000recipe.com/recipe/3686217
-   */
   @Test
-  void getRecipeDetailTest() throws IOException {
+  void getRecipeDetailTest() {
 
-    RecipeDetail recipeDetail = this.recipeDetailService.getRecipeDetail("김치찌개");
-    assertEquals(recipeDetail.getTitle(), "김치찌개");
-    assertEquals(recipeDetail.getIngredients().size(), 11);
-    assertEquals(recipeDetail.getStep().size(), 8);
+    Recipe recipe = recipeService.getRecipe(recipeNum);
+    assertEquals(recipe.getTitle(), "김치찌개");
   }
 
 }
